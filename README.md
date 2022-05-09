@@ -17,8 +17,9 @@ Datasets we used:
 * filter other charts by clicking on a table row
 * display total number of players for each game
 * show the ratio of currently playing people to all time high
-* suggest a game based on positive rating threshold and preferred genre
-* present sales chart of game developers
+* filter games based on genre, price
+* display game's achievements and median playtime
+* acknowledge the Beer Index<sup>TM</sup> of a certain game
 
 ## Dashboard sketch
 ![](data/sketch.jpg)
