@@ -12,4 +12,6 @@ jobs:
       - uses: r-lib/actions/setup-r@master
       
       - name: Run deploy script
-        run: Rscript deploy.R
+        run: |
+          scl enable devtoolset-7 $SHELL
+          Rscript deploy.R
