@@ -11,15 +11,5 @@ jobs:
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@master
       
-      - name: Install shiny
-        run: install.packages(c("shiny", "rsconnect"))
-        shell: Rscript {0}
-
-      - name: Activate rsconnect library
-        run: Rscript -e "library(rsconnect)" 
-
-      - name: Setup shinyapps.io credentials
-        run: Rscript -e "rsconnect::setAccountInfo(name=${{ secrets.SHINY_ACC_NAME }}, token=${{ secrets.TOKEN }}, secret=${{ secrets.SECRET }})"
-
-      - name: Push to shiny.io
-        run: Rscript -e "rsconnect::deployApp(appName = ${{ secrets.MASTER_NAME }})" 
+      - name: Run deploy script
+        run: Rscript deploy.R
