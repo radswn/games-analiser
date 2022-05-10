@@ -1,4 +1,0 @@
-CXX14 = g++
-CXX14STD = -std=gnu++14
-CXX14FLAGS = -g -O2
-CXX14PICFLAGS = -fpic
