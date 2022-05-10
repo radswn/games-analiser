@@ -16,7 +16,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Activate rsconnect library
-        run: Rscript -e library(rsconnect) 
+        run: Rscript -e "library(rsconnect)" 
 
       - name: Setup shinyapps.io credentials
         run: Rscript -e "rsconnect::setAccountInfo(name=${{ secrets.SHINY_ACC_NAME }}, token=${{ secrets.TOKEN }}, secret=${{ secrets.SECRET }})"
