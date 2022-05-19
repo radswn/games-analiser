@@ -39,5 +39,13 @@ shinyServer(function(input, output) {
          border = 'white')
     
   })
+  output$table <-
+    renderDataTable(games,
+                    options = list(
+                      pageLength = 7,
+                      autoWidth = TRUE,
+                      columnDefs = list(list(targets = "_all", width = '100px')),
+                      scrollX = TRUE
+                    ))
   
 })
