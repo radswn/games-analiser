@@ -1,6 +1,8 @@
 library(shiny)
 library(ggplot2)
 
+dataset <- diamonds
+
 ui <- fluidPage(
   title = "Diamonds Explorer",
   
