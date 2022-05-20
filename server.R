@@ -70,10 +70,10 @@ shinyServer(function(input, output, session) {
       success = c(0.666 * max(merged[input$table_rows_selected[1], 9:112]), max(merged[input$table_rows_selected[1], 9:112])),
       warning = c(0.333 * max(merged[input$table_rows_selected[1], 9:112]), 0.666 * max(merged[input$table_rows_selected[1], 9:112])),
       danger = c(0, 0.333 * max(merged[input$table_rows_selected[1], 9:112]))
-    ))
-  )
+    )
+  ))
   
-
+  
   output$x4 = renderPrint({
     s = input$table_rows_selected
     if (length(s)) {
@@ -81,25 +81,42 @@ shinyServer(function(input, output, session) {
       cat(merged[s])
     }
   })
-
-  everysecond <- function(x){
+  
+  everysecond <- function(x) {
     x[seq(2, length(x), 2)] <- ""
     x
   }
   
   output$plot <- renderPlot({
     if (length(input$table_rows_selected)) {
-      df <- data.frame(unlist(names(merged)[112:9]), unlist(merged[input$table_rows_selected, 112:9]))
-    }else{
-      df <- data.frame(unlist(names(merged)[112:9]), unlist(merged[1, 112:9]))
+      df <-
+        data.frame(unlist(names(merged)[112:9]), unlist(merged[input$table_rows_selected, 112:9]))
+    } else{
+      df <-
+        data.frame(unlist(names(merged)[112:9]), rep(0, 104))
     }
     colnames(df) <- c('date', 'average_number_of_players')
-    ggplot(data=df, aes(x=date, y=average_number_of_players)) +
-      geom_bar(stat='identity', fill="orange", width=0.7, position = position_dodge(width=1.0))+
-      scale_x_discrete(labels = everysecond(df$date)) + 
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.y=element_blank())+
-      ggtitle("Average number of players")
-  }
-  )
+    df$date <- gsub("avg.", "", df$date)
+    ggplot(data = df, aes(x = date, y = average_number_of_players)) +
+      geom_bar(
+        stat = 'identity',
+        fill = "orange",
+        width = 0.7,
+        position = position_dodge(width = 1.0)
+      ) +
+      scale_x_discrete(labels = everysecond(df$date)) +
+      theme_minimal() +
+      ggtitle("Average number of players") +
+      theme(
+        axis.text.x = element_text(
+          angle = 90,
+          vjust = 0.5,
+          hjust = 1
+        ),
+        axis.title.y = element_blank(),
+        plot.title = element_text(size = 40, face = "bold")
+      )
+    
+  })
   
 })

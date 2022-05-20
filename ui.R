@@ -7,11 +7,9 @@ ui <- fluidPage(
   title = "Diamonds Explorer",
   
   hr(),
-  fluidRow(
-    column(6, plotOutput("plot", height = 500)),
-    column(6,
-           DT::dataTableOutput('table'))
-  ),
+  fluidRow(column(6, plotOutput("plot", height = 500)),
+           column(6,
+                  DT::dataTableOutput('table'))),
   fluidRow(
     column(
       4,
@@ -35,10 +33,8 @@ ui <- fluidPage(
       selectInput('y', 'Y', names(dataset), names(dataset)[[2]]),
       selectInput('color', 'Color', c('None', names(dataset)))
     ),
-    column(
-      6,
-      gaugeOutput('playersMeter')
-    )
+    column(6,
+           gaugeOutput('playersMeter'))
   ),
   fluidRow(
     column(
