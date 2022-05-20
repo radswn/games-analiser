@@ -2,6 +2,7 @@ library(shiny)
 library(dplyr)
 library(tidyr)
 library(DT)
+library(flexdashboard)
 
 games <- read.csv('data/games_info.csv') %>%
   select(
@@ -58,6 +59,14 @@ shinyServer(function(input, output, session) {
       selection = 'single'
       
     )
+  
+  output$playersMeter = renderGauge(
+    gauge(
+      merged$`avg.2021-February`[input$table_rows_selected[1]],
+      min = 0,
+      max = 1000
+    )
+  )
   
   output$x4 = renderPrint({
     s = input$table_rows_selected
