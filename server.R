@@ -2,6 +2,7 @@ library(shiny)
 library(dplyr)
 library(tidyr)
 library(DT)
+library(flexdashboard)
 
 games <- read.csv('data/games_info.csv') %>%
   select(
@@ -30,6 +31,7 @@ rshpd <-
           direction = "wide")
 
 merged <- merge(games, rshpd, by.x = 'name', by.y = 'gamename')
+merged[is.na(merged)] <- 0
 
 shinyServer(function(input, output, session) {
   output$distPlot <- renderPlot({
@@ -58,6 +60,17 @@ shinyServer(function(input, output, session) {
       selection = 'single'
       
     )
+  
+  output$playersMeter = renderGauge(gauge(
+    merged$`avg.2021-February`[input$table_rows_selected[1]],
+    min = 0,
+    max = max(merged[input$table_rows_selected[1], 9:112]),
+    sectors = gaugeSectors(
+      success = c(0.666 * max(merged[input$table_rows_selected[1], 9:112]), max(merged[input$table_rows_selected[1], 9:112])),
+      warning = c(0.333 * max(merged[input$table_rows_selected[1], 9:112]), 0.666 * max(merged[input$table_rows_selected[1], 9:112])),
+      danger = c(0, 0.333 * max(merged[input$table_rows_selected[1], 9:112]))
+    ))
+  )
   
   output$x4 = renderPrint({
     s = input$table_rows_selected
