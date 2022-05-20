@@ -8,7 +8,7 @@ ui <- fluidPage(
   
   hr(),
   fluidRow(
-    column(6, verbatimTextOutput('x4')),
+    column(6, plotOutput("plot", height = 500)),
     column(6,
            DT::dataTableOutput('table'))
   ),
