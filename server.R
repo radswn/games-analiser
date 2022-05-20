@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library(tidyr)
+library(DT)
 
 games <- read.csv('data/games_info.csv') %>%
   select(
@@ -28,7 +29,7 @@ rshpd <-
           timevar = "date",
           direction = "wide")
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
   output$distPlot <- renderPlot({
     x    <- faithful[, 2]
     bins <- seq(min(x), max(x), length.out = input$bins + 1)
@@ -40,12 +41,24 @@ shinyServer(function(input, output) {
     
   })
   output$table <-
-    renderDataTable(games,
-                    options = list(
-                      pageLength = 7,
-                      autoWidth = TRUE,
-                      columnDefs = list(list(targets = "_all", width = '100px')),
-                      scrollX = TRUE
-                    ))
+    renderDataTable(
+      games,
+      options = list(
+        pageLength = 7,
+        autoWidth = TRUE,
+        columnDefs = list(list(targets = "_all", width = '100px')),
+        scrollX = TRUE
+      ),
+      selection = 'single'
+      
+    )
+  
+  output$x4 = renderPrint({
+    s = input$table_rows_selected
+    if (length(s)) {
+      cat('These rows were selected:\n\n')
+      cat(s, sep = ', ')
+    }
+  })
   
 })
