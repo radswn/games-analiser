@@ -29,6 +29,8 @@ rshpd <-
           timevar = "date",
           direction = "wide")
 
+merged <- merge(games, rshpd, by.x = 'name', by.y = 'gamename')
+
 shinyServer(function(input, output, session) {
   output$distPlot <- renderPlot({
     x    <- faithful[, 2]
@@ -42,11 +44,15 @@ shinyServer(function(input, output, session) {
   })
   output$table <-
     renderDataTable(
-      games,
+      merged,
       options = list(
         pageLength = 7,
         autoWidth = TRUE,
-        columnDefs = list(list(targets = "_all", width = '100px')),
+        columnDefs =
+          list(list(
+            visible = FALSE, targets = c(seq(9, 112))
+          )),
+        columnDefs = list(list(targets = '_all', width = '100px')),
         scrollX = TRUE
       ),
       selection = 'single'
