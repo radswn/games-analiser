@@ -37,28 +37,8 @@ ui <- fluidPage(
            gaugeOutput('playersMeter'))
   ),
   fluidRow(
-    column(
-      3,
-      h4("Diamonds Explorer 3"),
-      sliderInput(
-        'sampleSize',
-        'Sample Size',
-        min = 1,
-        max = nrow(dataset),
-        value = min(1000, nrow(dataset)),
-        step = 500,
-        round = 0
-      ),
-      br(),
-      checkboxInput('jitter', 'Jitter'),
-      checkboxInput('smooth', 'Smooth')
-    ),
-    column(
-      3,
-      selectInput('x', 'X', names(dataset)),
-      selectInput('y', 'Y', names(dataset), names(dataset)[[2]]),
-      selectInput('color', 'Color', c('None', names(dataset)))
-    ),
+    shinydashboard::valueBoxOutput('achievements', width = 3),
+    shinydashboard::valueBoxOutput('playtime', width = 3),
     column(
       3,
       h4("Diamonds Explorer 4"),
