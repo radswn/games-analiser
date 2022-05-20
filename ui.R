@@ -8,24 +8,9 @@ ui <- fluidPage(
   
   hr(),
   fluidRow(
-    column(
-      6,
-      h4("Diamonds Explorer"),
-      sliderInput(
-        'sampleSize',
-        'Sample Size',
-        min = 1,
-        max = nrow(dataset),
-        value = min(1000, nrow(dataset)),
-        step = 500,
-        round = 0
-      ),
-      br(),
-      checkboxInput('jitter', 'Jitter'),
-      checkboxInput('smooth', 'Smooth')
-    ),
+    column(6, verbatimTextOutput('x4')),
     column(6,
-           dataTableOutput('table'))
+           DT::dataTableOutput('table'))
   ),
   fluidRow(
     column(
