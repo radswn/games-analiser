@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(flexdashboard)
 library(dplyr)
 library(tidyr)
 library(tidyverse)
@@ -48,14 +49,14 @@ shinyServer(function(input, output, session) {
     
   })
   output$table <-
-    renderDataTable(
+    DT::renderDataTable(
       merged,
       options = list(
         pageLength = 7,
         autoWidth = TRUE,
         columnDefs =
           list(list(
-            visible = FALSE, targets = c(seq(10, 113))
+            visible = FALSE, targets = c(5, 8, seq(10, 113))
           )),
         columnDefs = list(list(targets = '_all', width = '100px')),
         scrollX = TRUE
@@ -96,7 +97,7 @@ shinyServer(function(input, output, session) {
           merged$average_playtime[input$table_rows_selected[1]],
           "-"
         ),
-        subtitle = "Average playtime",
+        subtitle = "Average playtime in minutes",
         icon = icon("clock"),
         color = "orange"
       )
@@ -126,15 +127,13 @@ shinyServer(function(input, output, session) {
       ) +
       scale_x_discrete(labels = everysecond(df$date)) +
       theme_minimal() +
-      ggtitle("Average number of players") +
       theme(
         axis.text.x = element_text(
           angle = 90,
           vjust = 0.5,
           hjust = 1
         ),
-        axis.title.y = element_blank(),
-        plot.title = element_text(size = 40, face = "bold")
+        axis.title.y = element_blank()
       )
     
   })
