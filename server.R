@@ -61,8 +61,7 @@ shinyServer(function(input, output, session) {
           list(list(
             visible = FALSE, targets = c(seq(5, 8), seq(10, 113))
           )),
-        columnDefs = list(list(targets = '_all', width = '100px')),
-        scrollX = FALSE
+        columnDefs = list(list(targets = '_all', width = '100px'))
       ),
       selection = 'single'
     )
