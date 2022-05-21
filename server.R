@@ -103,20 +103,6 @@ shinyServer(function(input, output, session) {
       )
     )
   
-  # output$ratings <-
-  #   shinydashboard::renderValueBox(
-  #     shinydashboard::valueBox(
-  #       value = ifelse(
-  #         length(input$table_rows_selected),
-  #         merged$average_playtime[input$table_rows_selected[1]],
-  #         "-"
-  #       ),
-  #       subtitle = "Average playtime in minutes",
-  #       icon = icon("clock"),
-  #       color = "orange"
-  #     )
-  #   )
-  
   output$ratings <-
     shinydashboard::renderValueBox({
       if (length(input$table_rows_selected)) {
@@ -132,7 +118,7 @@ shinyServer(function(input, output, session) {
           ic = icon("thumbs-down")
         }
       } else{
-        val = 0
+        val = "-"
         co = "maroon"
         ic = icon("question")
       }
