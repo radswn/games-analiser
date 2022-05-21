@@ -6,6 +6,7 @@ library(tidyr)
 library(tidyverse)
 library(DT)
 library(fontawesome)
+library(shinyalert)
 
 games <- read.csv('data/games_info.csv') %>%
   select(
@@ -38,6 +39,8 @@ merged <- merge(games, rshpd, by.x = 'name', by.y = 'gamename')
 merged[is.na(merged)] <- 0
 
 shinyServer(function(input, output, session) {
+  shinyalert("Welcome", includeText("data/help.txt"), type = "info")
+  
   output$distPlot <- renderPlot({
     x    <- faithful[, 2]
     bins <- seq(min(x), max(x), length.out = input$bins + 1)
@@ -56,10 +59,9 @@ shinyServer(function(input, output, session) {
         autoWidth = TRUE,
         columnDefs =
           list(list(
-            visible = FALSE, targets = c(5, 8, seq(10, 113))
+            visible = FALSE, targets = c(seq(5, 8), seq(10, 113))
           )),
-        columnDefs = list(list(targets = '_all', width = '100px')),
-        scrollX = TRUE
+        columnDefs = list(list(targets = '_all', width = '100px'))
       ),
       selection = 'single'
     )
