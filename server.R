@@ -55,7 +55,8 @@ shinyServer(function(input, output, session) {
     DT::renderDataTable(
       merged,
       options = list(
-        pageLength = 7,
+        paging = FALSE,
+        scrollY = "500px",
         autoWidth = TRUE,
         columnDefs =
           list(list(
