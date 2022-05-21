@@ -1,9 +1,11 @@
 library(shiny)
+library(shinydashboard)
+library(flexdashboard)
 library(dplyr)
 library(tidyr)
 library(tidyverse)
 library(DT)
-library(flexdashboard)
+library(fontawesome)
 
 games <- read.csv('data/games_info.csv') %>%
   select(
@@ -11,6 +13,7 @@ games <- read.csv('data/games_info.csv') %>%
     release_date,
     developer,
     genres,
+    achievements,
     positive_ratings,
     negative_ratings,
     average_playtime,
@@ -46,41 +49,59 @@ shinyServer(function(input, output, session) {
     
   })
   output$table <-
-    renderDataTable(
+    DT::renderDataTable(
       merged,
       options = list(
         pageLength = 7,
         autoWidth = TRUE,
         columnDefs =
           list(list(
-            visible = FALSE, targets = c(seq(9, 112))
+            visible = FALSE, targets = c(5, 8, seq(10, 113))
           )),
         columnDefs = list(list(targets = '_all', width = '100px')),
         scrollX = TRUE
       ),
       selection = 'single'
-      
     )
   
-  output$playersMeter = renderGauge(gauge(
+  output$playersMeter <- renderGauge(gauge(
     merged$`avg.2021-February`[input$table_rows_selected[1]],
     min = 0,
-    max = max(merged[input$table_rows_selected[1], 9:112]),
+    max = max(merged[input$table_rows_selected[1], 10:113]),
     sectors = gaugeSectors(
-      success = c(0.666 * max(merged[input$table_rows_selected[1], 9:112]), max(merged[input$table_rows_selected[1], 9:112])),
-      warning = c(0.333 * max(merged[input$table_rows_selected[1], 9:112]), 0.666 * max(merged[input$table_rows_selected[1], 9:112])),
-      danger = c(0, 0.333 * max(merged[input$table_rows_selected[1], 9:112]))
+      success = c(0.666 * max(merged[input$table_rows_selected[1], 10:113]), max(merged[input$table_rows_selected[1], 10:113])),
+      warning = c(0.333 * max(merged[input$table_rows_selected[1], 10:113]), 0.666 * max(merged[input$table_rows_selected[1], 10:113])),
+      danger = c(0, 0.333 * max(merged[input$table_rows_selected[1], 10:113]))
     )
   ))
   
+  output$achievements <-
+    shinydashboard::renderValueBox(
+      shinydashboard::valueBox(
+        value = ifelse(
+          length(input$table_rows_selected),
+          merged$achievements[input$table_rows_selected[1]],
+          "-"
+        ),
+        subtitle = "Total number of achievements",
+        icon = icon("trophy"),
+        color = "aqua"
+      )
+    )
   
-  output$x4 = renderPrint({
-    s = input$table_rows_selected
-    if (length(s)) {
-      cat('These rows were selected:\n\n')
-      cat(merged[s])
-    }
-  })
+  output$playtime <-
+    shinydashboard::renderValueBox(
+      shinydashboard::valueBox(
+        value = ifelse(
+          length(input$table_rows_selected),
+          merged$average_playtime[input$table_rows_selected[1]],
+          "-"
+        ),
+        subtitle = "Average playtime in minutes",
+        icon = icon("clock"),
+        color = "orange"
+      )
+    )
   
   everysecond <- function(x) {
     x[seq(2, length(x), 2)] <- ""
@@ -90,10 +111,10 @@ shinyServer(function(input, output, session) {
   output$plot <- renderPlot({
     if (length(input$table_rows_selected)) {
       df <-
-        data.frame(unlist(names(merged)[112:9]), unlist(merged[input$table_rows_selected, 112:9]))
+        data.frame(unlist(names(merged)[113:10]), unlist(merged[input$table_rows_selected, 113:10]))
     } else{
       df <-
-        data.frame(unlist(names(merged)[112:9]), rep(0, 104))
+        data.frame(unlist(names(merged)[113:10]), rep(0, 104))
     }
     colnames(df) <- c('date', 'average_number_of_players')
     df$date <- gsub("avg.", "", df$date)
@@ -106,15 +127,13 @@ shinyServer(function(input, output, session) {
       ) +
       scale_x_discrete(labels = everysecond(df$date)) +
       theme_minimal() +
-      ggtitle("Average number of players") +
       theme(
         axis.text.x = element_text(
           angle = 90,
           vjust = 0.5,
           hjust = 1
         ),
-        axis.title.y = element_blank(),
-        plot.title = element_text(size = 40, face = "bold")
+        axis.title.y = element_blank()
       )
     
   })
