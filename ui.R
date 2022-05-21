@@ -13,16 +13,11 @@ ui <- dashboardPage(
           title = "Average number of players"),
       box(DT::dataTableOutput('table', height = 500), style = "overflow-y: scroll")
     ),
-    fluidRow(box(
-      shinydashboard::valueBoxOutput('ratings', width = 6)
-    ),
-    box(gaugeOutput('playersMeter')),),
     fluidRow(
-      box(
-        shinydashboard::valueBoxOutput('achievements', width = 6),
-        shinydashboard::valueBoxOutput('playtime', width = 6)
-        
-      )
-    )
+      shinydashboard::valueBoxOutput('ratings'),
+      shinydashboard::valueBoxOutput('achievements'),
+      shinydashboard::valueBoxOutput('playtime')
+    ),
+    box(gaugeOutput('playersMeter'))
   )
 )
