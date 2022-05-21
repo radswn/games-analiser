@@ -103,19 +103,45 @@ shinyServer(function(input, output, session) {
       )
     )
   
+  output$ratings <-
+    shinydashboard::renderValueBox({
+      if (length(input$table_rows_selected)) {
+        val = round(
+          100 * merged$positive_ratings[input$table_rows_selected[1]] / (merged$positive_ratings[input$table_rows_selected[1]] + merged$negative_ratings[input$table_rows_selected[1]]),
+          1
+        )
+        if (val >= 50) {
+          co = "green"
+          ic = icon("thumbs-up")
+        } else{
+          co = "red"
+          ic = icon("thumbs-down")
+        }
+      } else{
+        val = "-"
+        co = "maroon"
+        ic = icon("question")
+      }
+      shinydashboard::valueBox(
+        value = val,
+        subtitle = "Positive ratings [%]",
+        color = co,
+        icon = ic
+      )
+      
+    })
+  
   everysecond <- function(x) {
     x[seq(2, length(x), 2)] <- ""
     x
   }
   
   output$plot <- renderPlot({
-    if (length(input$table_rows_selected)) {
-      df <-
-        data.frame(unlist(names(merged)[113:10]), unlist(merged[input$table_rows_selected, 113:10]))
-    } else{
-      df <-
-        data.frame(unlist(names(merged)[113:10]), rep(0, 104))
-    }
+    ifelse((length(input$table_rows_selected)),
+           df <-
+             data.frame(unlist(names(merged)[113:10]), unlist(merged[input$table_rows_selected, 113:10])),
+           df <-
+             data.frame(unlist(names(merged)[113:10]), rep(0, 104)))
     colnames(df) <- c('date', 'average_number_of_players')
     df$date <- gsub("avg.", "", df$date)
     ggplot(data = df, aes(x = date, y = average_number_of_players)) +
@@ -137,5 +163,4 @@ shinyServer(function(input, output, session) {
       )
     
   })
-  
 })
