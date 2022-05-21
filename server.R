@@ -105,6 +105,20 @@ shinyServer(function(input, output, session) {
       )
     )
   
+  output$beer <-
+    shinydashboard::renderValueBox(
+      shinydashboard::valueBox(
+        value = ifelse(
+          length(input$table_rows_selected),
+          round(merged$average_playtime[input$table_rows_selected[1]] / 60, 2),
+          "-"
+        ),
+        subtitle = "Beer index",
+        icon = icon("beer"),
+        color = "orange"
+      )
+    )
+  
   output$ratings <-
     shinydashboard::renderValueBox({
       if (length(input$table_rows_selected)) {
@@ -112,17 +126,22 @@ shinyServer(function(input, output, session) {
           100 * merged$positive_ratings[input$table_rows_selected[1]] / (merged$positive_ratings[input$table_rows_selected[1]] + merged$negative_ratings[input$table_rows_selected[1]]),
           1
         )
-        if (val >= 50) {
+        if (val >= 75) {
           co = "green"
           ic = icon("thumbs-up")
         } else{
-          co = "red"
-          ic = icon("thumbs-down")
+          if (val >= 50) {
+            co = "orange"
+            ic = icon("question")
+          } else{
+            co = "red"
+            ic = icon("thumbs-down")
+          }
         }
       } else{
         val = "-"
-        co = "maroon"
-        ic = icon("question")
+        co = "black"
+        ic = icon("alien")
       }
       shinydashboard::valueBox(
         value = val,
