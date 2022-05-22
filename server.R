@@ -52,12 +52,21 @@ shinyServer(function(input, output, session) {
         autoWidth = TRUE,
         columnDefs =
           list(list(
-            visible = FALSE, targets = c(seq(5, 8), seq(10, 113))
+            visible = FALSE, targets = c(seq(4, 8), seq(10, 113))
           )),
         columnDefs = list(list(targets = '_all', width = '100px'))
       ),
       selection = 'single'
     )
+  
+  output$tags <- renderText({
+    s <- input$table_rows_selected
+    if (length(s)) {
+      str_replace_all(merged$genres[s[1]], ";", ", ")
+    } else {
+      "-"
+    }
+  })
   
   output$playersMeter <- renderGauge(gauge(
     merged$`avg.2021-February`[input$table_rows_selected[1]],
