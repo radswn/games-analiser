@@ -40,10 +40,12 @@ merged[is.na(merged)] <- 0
 
 shinyServer(function(input, output, session) {
   shinyalert("Welcome", includeText("data/help.txt"), type = "info")
-
+  
   output$table <-
     DT::renderDataTable(
-      merged,
+      merged %>%
+        filter(price >= input$priceFilter[1] &&
+                 price <= input$priceFilter[2]),
       options = list(
         paging = FALSE,
         scrollY = "500px",
