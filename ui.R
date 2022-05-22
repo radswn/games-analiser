@@ -14,15 +14,19 @@ ui <- dashboardPage(
       box(DT::dataTableOutput('table', height = 500), style = "overflow-y: scroll")
     ),
     fluidRow(box(
-      shinydashboard::valueBoxOutput('ratings', width = 6)
-    ),
-    box(gaugeOutput('playersMeter')),),
-    fluidRow(
-      box(
-        shinydashboard::valueBoxOutput('achievements', width = 6),
-        shinydashboard::valueBoxOutput('playtime', width = 6)
-        
+      sliderInput(
+        'priceFilter',
+        label = 'Price',
+        min = 0,
+        max = 450,
+        value = c(0, 450)
       )
-    )
+    )),
+    fluidRow(
+      shinydashboard::valueBoxOutput('ratings'),
+      shinydashboard::valueBoxOutput('achievements'),
+      shinydashboard::valueBoxOutput('playtime')
+    ),
+    box(gaugeOutput('playersMeter'))
   )
 )
