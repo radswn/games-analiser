@@ -19,8 +19,8 @@ ui <- dashboardPage(
           'priceFilter',
           label = 'Price',
           min = 0,
-          max = 450,
-          value = c(0, 450)
+          max = 69,
+          value = c(0, 69)
         ),
         width = 4
       ),

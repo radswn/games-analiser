@@ -44,8 +44,9 @@ shinyServer(function(input, output, session) {
   output$table <-
     DT::renderDataTable(
       merged %>%
-        filter(price >= input$priceFilter[1] &&
-                 price <= input$priceFilter[2]),
+        filter(between(
+          price, input$priceFilter[1], input$priceFilter[2]
+        )),
       options = list(
         paging = FALSE,
         scrollY = "500px",
