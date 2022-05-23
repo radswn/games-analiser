@@ -19,7 +19,8 @@ games <- read.csv('data/games_info.csv') %>%
     negative_ratings,
     average_playtime,
     price
-  )
+  ) %>%
+  mutate(release_date = as.Date(release_date))
 
 players <- read.csv('data/games_players.csv') %>%
   select(gamename,
@@ -44,20 +45,34 @@ shinyServer(function(input, output, session) {
   output$table <-
     DT::renderDataTable(
       merged %>%
-        filter(price >= input$priceFilter[1] &&
-                 price <= input$priceFilter[2]),
+        filter(
+          between(release_date, input$dateFilter[1], input$dateFilter[2])
+        ) %>%
+        filter(between(
+          price, input$priceFilter[1], input$priceFilter[2]
+        )),
       options = list(
         paging = FALSE,
         scrollY = "500px",
         autoWidth = TRUE,
         columnDefs =
           list(list(
-            visible = FALSE, targets = c(seq(5, 8), seq(10, 113))
+            visible = FALSE, targets = c(seq(4, 8), seq(10, 113))
           )),
         columnDefs = list(list(targets = '_all', width = '100px'))
       ),
       selection = 'single'
     )
+  
+  output$tags <- renderText({
+    s <- input$table_rows_selected
+    if (length(s)) {
+      str_replace_all(merged$genres[s[1]], ";", ", ")
+    } else {
+      "-"
+    }
+  })
+  
   
   output$playersMeter <- renderGauge(gauge(
     merged$`avg.2021-February`[input$table_rows_selected[1]],
