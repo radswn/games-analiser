@@ -9,7 +9,7 @@ css <- HTML("
 }")
 
 ui <- dashboardPage(
-  dashboardHeader(title = "Games analiser"),
+  dashboardHeader(title = "Games Analiser"),
   dashboardSidebar(disable = TRUE),
   dashboardBody(
     tags$head(tags$style(css)),
