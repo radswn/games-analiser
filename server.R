@@ -19,7 +19,8 @@ games <- read.csv('data/games_info.csv') %>%
     negative_ratings,
     average_playtime,
     price
-  )
+  ) %>%
+  mutate(release_date = as.Date(release_date))
 
 players <- read.csv('data/games_players.csv') %>%
   select(gamename,
@@ -44,6 +45,9 @@ shinyServer(function(input, output, session) {
   output$table <-
     DT::renderDataTable(
       merged %>%
+        filter(
+          between(release_date, input$dateFilter[1], input$dateFilter[2])
+        ) %>%
         filter(between(
           price, input$priceFilter[1], input$priceFilter[2]
         )),
@@ -68,6 +72,7 @@ shinyServer(function(input, output, session) {
       "-"
     }
   })
+  
   
   output$playersMeter <- renderGauge(gauge(
     merged$`avg.2021-February`[input$table_rows_selected[1]],

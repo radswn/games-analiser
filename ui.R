@@ -22,6 +22,14 @@ ui <- dashboardPage(
           max = 69,
           value = c(0, 69)
         ),
+        dateRangeInput(
+          'dateFilter',
+          label = 'Date',
+          start = '1998-11-08',
+          end = '2019-05-01',
+          min = '1998-01-01',
+          max = '2022-01-01'
+        ),
         width = 4
       ),
       box(uiOutput('tags'), width = 4),
