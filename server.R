@@ -53,7 +53,7 @@ shinyServer(function(input, output, session) {
         )),
       options = list(
         paging = FALSE,
-        scrollY = "500px",
+        scrollY = "330px",
         autoWidth = TRUE,
         columnDefs =
           list(list(
@@ -104,7 +104,7 @@ shinyServer(function(input, output, session) {
       shinydashboard::valueBox(
         value = ifelse(
           length(input$table_rows_selected),
-          merged$average_playtime[input$table_rows_selected[1]],
+          format(merged$average_playtime[input$table_rows_selected[1]], big.mark = ","),
           "-"
         ),
         subtitle = "Average playtime in minutes",
