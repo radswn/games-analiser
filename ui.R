@@ -1,5 +1,12 @@
 library(shiny)
 library(ggplot2)
+library(shinydashboard)
+library(flexdashboard)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(DT)
+library(fontawesome)
 library(shinyalert)
 
 css <- HTML("
@@ -25,7 +32,9 @@ ui <- dashboardPage(
         title = "Players currently playing",
         width = 4
       ),
-      box(uiOutput('tags'), title = 'Tags', width = 4),
+      box(uiOutput('tags'),
+          title = 'Tags',
+          width = 4),
       box(
         sliderInput(
           'priceFilter',
@@ -50,6 +59,7 @@ ui <- dashboardPage(
       shinydashboard::valueBoxOutput('ratings'),
       shinydashboard::valueBoxOutput('achievements'),
       shinydashboard::valueBoxOutput('playtime')
-    )
+    ),
+    imageOutput('logo')
   )
 )

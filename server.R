@@ -42,6 +42,14 @@ merged[is.na(merged)] <- 0
 shinyServer(function(input, output, session) {
   shinyalert("Welcome", includeText("data/help.txt"), type = "info")
   
+  output$logo <- renderImage({
+    filename <- normalizePath(file.path('./data/logo.png'))
+    
+    list(src = filename,
+         width = 378,
+         height = 62)
+  }, deleteFile = FALSE)
+  
   output$table <-
     DT::renderDataTable(
       merged %>%
@@ -135,7 +143,7 @@ shinyServer(function(input, output, session) {
       } else{
         val = "-"
         co = "black"
-        ic = icon("alien")
+        ic = icon("pause")
       }
       shinydashboard::valueBox(
         value = val,
